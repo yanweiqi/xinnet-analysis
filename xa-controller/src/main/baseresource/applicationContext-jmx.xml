@@ -1,0 +1,15 @@
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+	<bean id="jmsMBeanServerClient" class="org.springframework.jmx.support.MBeanServerConnectionFactoryBean"
+		p:serviceUrl="${jmsUrl}" lazy-init="true"/>
+	<bean id="remoteJmsMbean" class="org.springframework.jmx.access.MBeanProxyFactoryBean"
+	      p:objectName="demoBrokerContext:brokerName=localhost,type=Broker"
+	      p:server-ref="jmsMBeanServerClient" p:proxyInterface="org.apache.activemq.broker.jmx.BrokerViewMBean" lazy-init="true"/>
+	     
+
+
+</beans>
+<!-- END SNIPPET: example -->

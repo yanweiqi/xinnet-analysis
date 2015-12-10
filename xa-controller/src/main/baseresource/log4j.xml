@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+    <!-- 输出日志到控制台  ConsoleAppender -->
+    <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender" >
+        <param name="Target" value="System.out" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%p] %l \: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="AllFileAppender" class="org.apache.log4j.DailyRollingFileAppender" >
+        <param name="Threshold" value="info"></param>  
+        <param name="ImmediateFlush" value="true"></param> 
+        <param name="File" value="${catalina.base}/logs/xa-controller/all.log" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd'.log'"></param> 
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%p] %l \: %m%n" />
+        </layout>
+    </appender>
+
+    <appender class="org.apache.log4j.DailyRollingFileAppender" name="ErrorFileAppender">
+        <param name="File" value="${catalina.base}/logs/xa-controller/error.log" />
+        <param name="Append" value="true" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%p] %l \: %m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="ERROR" />
+            <param name="LevelMax" value="ERROR" />
+        </filter>
+    </appender>
+    
+     <appender name="VisitFileAppender" class="org.apache.log4j.DailyRollingFileAppender" >
+        <param name="Threshold" value="info"></param>  
+        <param name="ImmediateFlush" value="true"></param> 
+        <param name="File" value="${catalina.base}/logs/xa-controller/visit.log" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd'.log'"></param> 
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%p] %l \: %m%n" />
+        </layout>
+    </appender>
+    
+    <logger additivity="false" name="com.xinnet.xa.core.web.ValidateFilter">
+        <level value="INFO" />
+        <appender-ref ref="VisitFileAppender" />
+        <appender-ref ref="ConsoleAppender" />
+         <appender-ref ref="AllFileAppender" />
+    </logger> 
+
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="AllFileAppender" />
+        <appender-ref ref="ErrorFileAppender" />
+        <appender-ref ref="ConsoleAppender" />
+    </root>
+</log4j:configuration>

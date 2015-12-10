@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		                   http://www.springframework.org/schema/context 
+		                   http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<description>Spring公共配置</description>
+
+	<bean id="defaultFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="${JMS_SERVER_URL}" />
+		<property name="userName" value="${ActiveMQ.username}" />
+		<property name="password" value="${ActiveMQ.password}" />
+	</bean>
+
+	<bean id="cachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+		<property name="targetConnectionFactory" ref="defaultFactory" />
+		<property name="sessionCacheSize" value="100" />
+	</bean>
+
+	 <bean id="advancedNotifyQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="queue0" />
+	</bean>
+
+	<bean id="advancedQueueContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="cachingConnectionFactory" />
+		<property name="destination" ref="advancedNotifyQueue" />
+		<property name="messageListener" ref="advancedNotifyMessageListener" />
+		<!-- 初始5个Consumer, 可动态扩展到10 -->
+		<property name="concurrentConsumers" value="5" />
+		<property name="maxConcurrentConsumers" value="10" />
+		<!-- 设置消息确认模式为Client -->
+		<property name="sessionAcknowledgeModeName" value="CLIENT_ACKNOWLEDGE" />
+	</bean>
+		
+	<!-- 异步接收消息处理类 -->
+	<bean id="advancedNotifyMessageListener" class="com.xinnet.xa.collector.pagetrack.jms.AnalystMessageListener" />
+	
+	<bean id="goodsBuyNotifyQueue" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="goodsBuyQueue" />
+	</bean>
+      
+    <bean id="goodsBuyQueueContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="cachingConnectionFactory" />
+		<property name="destination" ref="goodsBuyNotifyQueue" />
+		<property name="messageListener" ref="goodsBuyNotifyMessageListener" />
+		<property name="concurrentConsumers" value="5" />
+		<property name="maxConcurrentConsumers" value="10" />
+		<property name="sessionAcknowledgeModeName" value="CLIENT_ACKNOWLEDGE" />
+	</bean>	
+	
+	<bean id="goodsBuyNotifyMessageListener" class="com.xinnet.xa.collector.saletrack.jms.GoodsBuyAnalystMessageListener" />
+	
+
+</beans>
