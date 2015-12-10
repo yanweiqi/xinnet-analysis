@@ -160,7 +160,7 @@
 		</dependency>
 		<!-- AOP end -->
 		
-		<!-- SPRINGSIDE begin -->
+		<!-- SPRINGSIDE begin 
 		<dependency>
 			<groupId>org.springside</groupId>
 			<artifactId>springside-core</artifactId>
@@ -176,7 +176,7 @@
 			<artifactId>springside-metrics</artifactId>
 			<version>4.2.2.GA</version>
 		</dependency>
-		<!-- SPRINGSIDE end -->
+		SPRINGSIDE end -->
 
 		<!-- SPRING basic begin -->
 		<!-- email/scheduler/freemarker -->
